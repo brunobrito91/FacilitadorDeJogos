@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Chronometer
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="100sp"
+        android:paddingBottom="60px"/>
+
+    <Button
+        android:id="@+id/btnToggleStartPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickToggleStartPauseContinue"
+        android:text="@string/txt_btn_start"
+        android:textSize="60sp"
+        android:paddingBottom="15px"/>
+
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickStop"
+        android:text="@string/txt_btn_stop"
+        android:textSize="60sp" />
+
+</LinearLayout>

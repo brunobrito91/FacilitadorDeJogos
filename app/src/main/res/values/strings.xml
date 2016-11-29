@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Facilitador De Jogos De Tabuleiro</string>
+    <string name="txt_btn_start">Start</string>
+    <string name="txt_btn_pause">Pause</string>
+    <string name="txt_btn_stop">Stop</string>
+    <string name="txt_tempo">Tempo</string>
+    <string name="configuracao">Configuração</string>
+    <string name="salvar">Salvar</string>
+    <string name="txt_btn_sortear">Sortear</string>
+</resources>

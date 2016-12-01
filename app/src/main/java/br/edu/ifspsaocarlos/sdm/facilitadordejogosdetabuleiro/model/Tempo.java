@@ -8,4 +8,12 @@ public interface Tempo {
     public long getTempoInicial();
 
     public void setTempoInicial(long tempo);
+
+    void start();
+
+    void pause();
+
+    void stop();
+
+    void inicializa(long i);
 }

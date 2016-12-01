@@ -7,4 +7,12 @@
     <string name="configuracao">Configuração</string>
     <string name="salvar">Salvar</string>
     <string name="txt_btn_sortear">Sortear</string>
+    <string name="cronometro">Cronômetro</string>
+    <string name="tipo">tipo</string>
+    <string name="ampulheta">Ampulheta</string>
+    <string name="txt_btn_continuar">Continue</string>
+    <string name="cara_coroa">Cara ou Coroa</string>
+    <string name="dado">Dado</string>
+    <string name="txt_sorteio">Sorteio</string>
+    <string name="sorteio_realizado">Sorteio realizado</string>
 </resources>

@@ -2,18 +2,12 @@ package br.edu.ifspsaocarlos.sdm.facilitadordejogosdetabuleiro;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
-
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import br.edu.ifspsaocarlos.sdm.facilitadordejogosdetabuleiro.model.Ampulheta;
 import br.edu.ifspsaocarlos.sdm.facilitadordejogosdetabuleiro.model.Cronometro;
@@ -21,97 +15,60 @@ import br.edu.ifspsaocarlos.sdm.facilitadordejogosdetabuleiro.model.Tempo;
 
 public class TempoActivity extends AppCompatActivity {
 
-    private static final int CONFIGURACAO_AMPULHETA = 0;
+    private static final int CONFIGURACAO = 0;
     private Chronometer chronometer;
-    private ContadorRegressivo contadorRegressivo;
     private Tempo tempo;
-    private long milliseconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tempo);
 
-        chronometer = (Chronometer) findViewById(R.id.timer);
-
-        if (getIntent().hasExtra("tipo")) {
-            String tipo = getIntent().getStringExtra("tipo");
-            if (tipo.equals("Cronômetro")) {
-                tempo = new Cronometro();
+        //verifica se quem chamou essa activity passou o parametro tipo
+        if (getIntent().hasExtra(getString(R.string.tipo))) {
+            //recupera o Chronometer
+            chronometer = (Chronometer) findViewById(R.id.timer);
+            //recupera o valor passado no parametro tipo
+            String tipo = getIntent().getStringExtra(getString(R.string.tipo));
+            //verifica qual item foi selecionado na activity que chamou essa activity e cria um Tempo
+            if (tipo.equals(getString(R.string.cronometro))) {
+                tempo = new Cronometro(chronometer);
             }
-            if (tipo.equals("Ampulheta")) {
-                tempo = new Ampulheta();
-                contadorRegressivo = new ContadorRegressivo(this, chronometer, tempo.getTempoInicial(), 100);
-                chronometer.setText(DateFormat.format("mm:ss", tempo.getTempoInicial()));
+            if (tipo.equals(getString(R.string.ampulheta))) {
+                tempo = new Ampulheta(chronometer);
             }
         }
-
     }
 
     public void onClickToggleStartPauseContinue(View view) {
+        //recupera o botão que foi pressionado
         Button btnToggleStartPause = (Button) view;
+        //recupera o texto contido no botão no momento em que foi pressionado
         String txtBtn = btnToggleStartPause.getText().toString();
+        /*inicia a contagem se foi pressionado o botão com o texto start ou continue
+          pausa a contagem se foi pressionado o botão com o texto pause*/
         if (tempo != null) {
-            if (tempo instanceof Cronometro)
-                toggleStarPauseContinueCronometro(btnToggleStartPause, txtBtn);
-            if (tempo instanceof Ampulheta)
-                toggleStarPauseContinueAmpulheta(btnToggleStartPause, txtBtn);
-        }
-    }
-
-    private void toggleStarPauseContinueAmpulheta(Button btnToggleStartPause, String txtBtn) {
-        if (txtBtn.equals("Start") || txtBtn.equals("Continue")) {
-            contadorRegressivo.start();
-            btnToggleStartPause.setText("Pause");
-        } else if (txtBtn.equals("Pause")) {
-            contadorRegressivo.cancel();
-            long t = 1;
-            SimpleDateFormat sf = new SimpleDateFormat("mm:ss");
-            try {
-                t = sf.parse(chronometer.getText().toString()).getTime() - 10800000;
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (txtBtn.equals(getString(R.string.txt_btn_start)) || txtBtn.equals(getString(R.string.txt_btn_continuar))) {
+                tempo.start();
+                btnToggleStartPause.setText(getString(R.string.txt_btn_pause));
+            } else if (txtBtn.equals(getString(R.string.txt_btn_pause))) {
+                tempo.pause();
+                btnToggleStartPause.setText(getString(R.string.txt_btn_continuar));
             }
-            contadorRegressivo = new ContadorRegressivo(this, chronometer, t, 1000);
-            btnToggleStartPause.setText("Continue");
-        }
-    }
-
-    private void toggleStarPauseContinueCronometro(Button btnToggleStartPause, String txtBtn) {
-        if (txtBtn.equals("Start") || txtBtn.equals("Continue")) {
-            chronometer.setBase(SystemClock.elapsedRealtime() - milliseconds);
-            chronometer.start();
-            btnToggleStartPause.setText("Pause");
-        } else if (txtBtn.equals("Pause")) {
-            milliseconds = SystemClock.elapsedRealtime() - chronometer.getBase();
-            chronometer.stop();
-            btnToggleStartPause.setText("Continue");
         }
     }
 
     public void onClickStop(View view) {
-        if (tempo instanceof Cronometro)
-            clickStopCronometro();
-        else if (tempo instanceof Ampulheta)
-            clickStopAmpulheta();
+        //recupera o botão toggleStartPause
         Button btnToggleStartPause = (Button) findViewById(R.id.btnToggleStartPause);
-        btnToggleStartPause.setText("Start");
-    }
-
-    private void clickStopAmpulheta() {
-        contadorRegressivo.cancel();
-        contadorRegressivo = new ContadorRegressivo(this, chronometer, tempo.getTempoInicial(), 1000);
-        chronometer.setText(DateFormat.format("mm:ss", tempo.getTempoInicial()));
-    }
-
-    private void clickStopCronometro() {
-        milliseconds = 0;
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.stop();
+        //zera a contagem
+        tempo.stop();
+        btnToggleStartPause.setText(getString(R.string.txt_btn_start));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //infla o menu de configuração de tempo se o tempo for Ampulheta
         if (tempo instanceof Ampulheta) {
             getMenuInflater().inflate(R.menu.menu_configuracao_tempo, menu);
             return true;
@@ -120,18 +77,20 @@ public class TempoActivity extends AppCompatActivity {
     }
 
     public void onClickConfiguracao(MenuItem menuItem) {
+        //inicia a Activity ConfiguracaoTempoActivity quando a opção Configuração do menu é selecionada
         Intent intent = new Intent(getBaseContext(), ConfiguracaoTempoActivity.class);
-        intent.putExtra("tempo", (Serializable) tempo);
-        startActivityForResult(intent, CONFIGURACAO_AMPULHETA);
+        startActivityForResult(intent, CONFIGURACAO);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CONFIGURACAO_AMPULHETA) {
+        /*verifica se o retorno da Activity ConfiguracaoTempoActivity retornou com sucesso
+          recupera o valor retornado através do parametro tempo e inicializa as configurações do tempo com o valor configurado
+          na tela ConfiguracaoTempoActivity*/
+        if (requestCode == CONFIGURACAO) {
             if (resultCode == RESULT_OK) {
-                tempo = (Tempo) data.getSerializableExtra("tempo");
-                contadorRegressivo = new ContadorRegressivo(this, chronometer, tempo.getTempoInicial(), 100);
-                chronometer.setText(DateFormat.format("mm:ss", tempo.getTempoInicial()));
+                long t = data.getLongExtra("tempo", 0);
+                tempo.inicializa(t);
             }
         }
     }

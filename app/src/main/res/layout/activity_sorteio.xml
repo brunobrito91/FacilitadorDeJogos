@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/xadrez"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -9,7 +10,7 @@
         android:id="@+id/imgSorteio"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_marginBottom="100px"
+        android:layout_marginBottom="150px"
         android:scaleType="fitCenter" />
 
     <Button
@@ -18,6 +19,6 @@
         android:layout_height="wrap_content"
         android:onClick="onClickSortear"
         android:text="@string/txt_btn_sortear"
-        android:textSize="60sp" />
+        android:textSize="40sp" />
 
 </LinearLayout>

@@ -2,18 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/xadrez"
     android:gravity="center"
     android:orientation="vertical">
 
-  <EditText
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/tempoInicial"/>
+    <EditText
+        android:id="@+id/tempoInicial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClickSalvar"
-        android:text="@string/salvar"/>
+        android:text="@string/salvar" />
 
 </LinearLayout>
